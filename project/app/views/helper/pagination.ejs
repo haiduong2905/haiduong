@@ -1,0 +1,80 @@
+<%
+paginationHelper = (paginationObj, type, currentStatus, keyword) => {
+    let totalItems          = paginationObj.totalItems;
+    let totalItemsPerPage   = paginationObj.totalItemsPerPage;
+    let totalPages          = Math.ceil(totalItems/totalItemsPerPage);
+    let currentPage         = paginationObj.currentPage;    
+    let pageRanges          = paginationObj.pageRanges;    
+    let to                  = totalItemsPerPage * currentPage;
+    let from                = to - totalItemsPerPage + 1;
+    let xhtmlPagination     = '';
+    if(to > totalItems) to  = totalItems;
+
+    if (totalPages > 1) { 
+        let xhtmlFirst          = ''; // N?u ko mu?n hi?n th? 4 nút Next,First..                                                                  thì ban ??u gán b?ng '';
+        let xhtmlPrevious       = '';
+        let xhtmlNext           = '';
+        let xhtmlEnd            = '';
+        let xhtmlPages          = '';
+        let link                = systemConfigs.prefixAdmin + '/' + type + '/status/' + currentStatus ;
+
+        if (keyword !== '') {
+            link +='?keyword=' + keyword + '&page=';
+        } else link +='?page=';
+    // Hi?n th? 4 nút First, Next, End, Previous
+        if (currentPage > 1){
+            xhtmlFirst  = `<li><a href="${link}">First</a></li>`;
+            xhtmlPrevious  = `<li><a href="${link}${currentPage - 1}">Previous</a></li>`;      
+        }
+    
+        if (currentPage < totalPages){
+            xhtmlNext  = `<li><a href="${link}${currentPage + 1}">Next</a></li>`; 
+            xhtmlEnd  = `<li><a href="${link}${totalPages}">End</a></li>`;
+        }
+    
+    // Chia s? l??ng trang hi?n th?
+        let middlePages = Math.ceil(pageRanges/2);
+        let minPages = currentPage - middlePages + 1 ;
+        let maxPages = minPages + pageRanges - 1;
+    
+    // Ki?m tra ?i?u ki?n n?u minPages <= 1 : ch?n d??i [2(minPages) 3 4 5(maxPages)]
+        if (minPages <= 1) {
+            minPages = 1 ;
+            maxPages = pageRanges;
+        }
+    
+    // Ki?m tra ?i?u ki?n n?u maxPages >= totalPages : ch?n trên [2(minPages) 3 4 5(maxPages)]
+        if (maxPages >= totalPages) {
+            maxPages = totalPages;
+            minPages =(( maxPages - pageRanges + 1) >= 1) ? maxPages - pageRanges + 1 :  1 ;
+        }
+    
+        for (i = minPages; i <=  maxPages; i++) {
+            if(i == currentPage ) {
+                xhtmlPages += `<li class="active"><a href="${link}${i}">${i}</a></li>`;
+            } else {
+                xhtmlPages += `<li><a href="${link}${i}">${i}</a></li>`;
+            }    
+        }
+        xhtmlPagination = `<ul class="pagination text-center">` + xhtmlFirst + xhtmlPrevious + xhtmlPages + xhtmlNext + xhtmlEnd + `</ul>`;
+    }
+    
+    return `
+        <div class="panel panel-info" id="pagination">
+            <div class="panel-heading">
+                Pagination
+                <span class="label label-warning">Total pages: ${totalPages}</span>
+                <span class="label label-danger">Total entries: ${totalItems}</span>
+            </div>
+            <div class="panel-body">
+                <div class="infor-pagination">
+                    <p>Number of entries on the page: <span>${totalItemsPerPage}</span></p>
+                    <p>Showing <span> ${from} </span> to <span>${to}</span> of <span>${totalItems}</span> entries</p>
+                </div>
+                <div class="ad-pagination">
+                    ${xhtmlPagination}
+                </div>
+            </div>
+        </div>`; 
+}
+%>

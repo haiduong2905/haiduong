@@ -1,0 +1,31 @@
+<% 
+    actionHelper = (linkPrefix) => { 
+       let actions = [
+            { value: "", name: "Bulk Action" },
+            { value: "change-status/active", name: "Active" },
+            { value: "change-status/inactive", name: "InActive" },
+            { value: "change-ordering/", name: "Change Ordering" },
+            { value: "delete/", name: "Delete" }
+       ];
+       let linkAddNew = linkPrefix + 'form';
+       let xhtmlActions = '';
+       actions.forEach((action)=>{
+            let link = linkPrefix + action.value;
+            xhtmlActions += `<option value="${link}">${action.name}</option>`;
+       })
+        return `<div class="zcontrols">
+        <select name="action" class="form-control slbAction">
+            ${xhtmlActions}
+        </select>
+        <button class="btn btn-info btnAction" type="button" id="btn-action" value="btnAction" disabled>Apply</button>
+        <div class="pull-right">
+            <a href="${linkAddNew}" class="btn btn-warning btn-addNew">Add New</a>
+        </div>
+    </div>`;
+    } 
+%>
+
+
+
+
+
