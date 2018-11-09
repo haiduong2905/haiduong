@@ -1,5 +1,8 @@
-const UsersModel = require(__path_schemas + 'users');
-const GroupsModel = require(__path_models + 'groups');
+const collection = 'users';
+const UsersModel = require(__path_schemas + collection);
+const FileHelper = require(__path_helpers + 'file');
+const uploadFolder = 'public/uploads/' + collection + '/';
+
 module.exports = {
     listItems: (params, options = null) => { // Options : Thêm lựa chọn nếu có trường hợp tương tự
         let objWhere = {};
@@ -13,7 +16,7 @@ module.exports = {
         if (params.keyword !== '') objWhere.name = new RegExp(params.keyword, 'i');
         return UsersModel
             .find(objWhere)
-            .select('name status ordering created modified group.name')
+            .select('name avatar status ordering created modified group.name')
             .sort(sort) // Sort theo ordering
             .skip((params.pagination.currentPage - 1) * params.pagination.totalItemsPerPage) //Bắt đầu lấy từ phần tử nào cho 1 trang
             .limit(params.pagination.totalItemsPerPage); // Lấy ra tổng số phần tử / 1 trang
@@ -22,10 +25,11 @@ module.exports = {
         return UsersModel.find({}, { _id: 1, name: 1 });
     },
     getItems: (id, options = null) => {
-        return UsersModel.findById(id);
+        return UsersModel.findById(id); // Lấy item theo id
     },
     countItems: (params, options = null) => {
         let objWhere = {};
+        if (params.groupID !== 'allvalue' && params.groupID !== '') objWhere['group.id'] = params.groupID;
         if (params.currentStatus !== 'all') objWhere.status = params.currentStatus;
         if (params.keyword !== '') objWhere.name = new RegExp(params.keyword, 'i');
         return UsersModel.countDocuments(params.objWhere);
@@ -36,7 +40,7 @@ module.exports = {
         let data = { // bổ sung các thuộc tính chỉnh sửa: bởi ai, khi nào?
             modified: {
                 user_id: 0,
-                user_name: 0,
+                user_name: 'admin',
                 time: Date.now()
             }
         }
@@ -54,7 +58,7 @@ module.exports = {
             ordering: parseInt(orderings),
             modified: {
                 user_id: 0,
-                user_name: 0,
+                user_name: 'admin',
                 time: Date.now()
             }
         }
@@ -68,11 +72,26 @@ module.exports = {
             return UsersModel.updateOne({ _id: cids }, data)
         }
     },
-    deleteItems: (id, options = null) => {
+    deleteItems: async(id, options = null) => {
         if (options.task == 'delete-one') {
+
+            await UsersModel.findById(id).then((item) => {
+                FileHelper.remove(uploadFolder, item.avatar);
+            });
             return UsersModel.deleteOne({ _id: id });
         }
         if (options.task == 'delete-multi') {
+            if (Array.isArray(id)) {
+                for (let index = 0; index < id.length; index++) {
+                    await UsersModel.findById(id[index]).then((item) => {
+                        FileHelper.remove(uploadFolder, item.avatar);
+                    });
+                }
+            } else {
+                await UsersModel.findById(id).then((item) => {
+                    FileHelper.remove(uploadFolder, item.avatar);
+                });
+            }
             return UsersModel.deleteMany({ _id: { $in: id } });
         }
     },
@@ -96,13 +115,14 @@ module.exports = {
                 name: item.name,
                 status: item.status,
                 content: item.content,
+                avatar: item.avatar,
                 group: {
                     id: item.group_id,
                     name: item.group_name
                 },
                 modified: { // bổ sung các thuộc tính chỉnh sửa: bởi ai, khi nào?
                     user_id: 0,
-                    user_name: 0,
+                    user_name: 'admin',
                     time: Date.now()
                 }
             });

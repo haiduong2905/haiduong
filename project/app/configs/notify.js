@@ -1,13 +1,7 @@
 module.exports = {
     // Các thông báo chỉnh sử và thêm mới dữ liệu
     CHANGE_STATUS_SUCCESS: 'Thay đổi status thành công!',
-    CHANGE_STATUS_MULTI_SUCCESS: 'Cập nhật thành công status %d phần tử!',
-    CHANGE_ORDERING_SUCCESS: 'Thay đổi Ordering thành công!',
-    CHANGE_ORDERING_MULTI_SUCCESS: 'Thay đổi Ordering thành công %d phần tử!',
-
     DELETE_SUCCESS: 'Xóa dữ liệu thành công!',
-    DELETE_MULTI_SUCCESS: 'Xóa dữ liệu thành công %d phần tử!',
-
     EDIT_SUCCESS: 'Đã chỉnh sửa dữ liệu thành công!',
     ADD_SUCCESS: 'Thêm mới dữ liệu thành công!',
 

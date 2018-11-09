@@ -6,5 +6,9 @@ module.exports = {
     folder_schemas: 'schemas',
     folder_models: 'models',
     folder_validates: 'validates',
-    folder_views: 'views'
+    folder_views: 'views',
+    foler_module_admin: 'admin',
+    foler_module_blog: 'blog',
+    folder_public: 'public',
+    folder_uploads: 'uploads'
 }

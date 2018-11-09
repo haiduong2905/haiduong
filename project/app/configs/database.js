@@ -1,6 +1,7 @@
 module.exports = {
     username: 'haiduong',
     password: 'A123456',
-    database: 'learning-nodejs',
+    database: 'project-shopping',
+    collection_category: 'category',
     collection_items: 'items'
 }

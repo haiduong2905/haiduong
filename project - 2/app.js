@@ -22,7 +22,16 @@ global.__path_routes = __path_app + pathConfigs.folder_routes + '/';
 global.__path_schemas = __path_app + pathConfigs.folder_schemas + '/';
 global.__path_models = __path_app + pathConfigs.folder_models + '/';
 global.__path_validates = __path_app + pathConfigs.folder_validates + '/';
+
 global.__path_views = __path_app + pathConfigs.folder_views + '/';
+global.__path_views_admin = __path_views + pathConfigs.foler_module_admin + '/';
+global.__path_views_blog = __path_views + pathConfigs.foler_module_blog + '/';
+
+
+
+global.__path_public = __base + pathConfigs.folder_public + '/';
+
+global.__path_uploads = __path_public + pathConfigs.folder_uploads + '/';
 
 /* Module tự viết*/
 const systemConfigs = require(__path_config + 'system');
@@ -41,7 +50,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(expressLayouts);
-app.set('layout', __path_views + 'backend');
+app.set('layout', __path_views_admin + 'backend');
 
 // app.use(logger('dev')); Bỏ log các load khi npm start
 app.use(express.json());
@@ -54,7 +63,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(flash(app, {
-    viewName: __path_views + 'elements/notify'
+    viewName: __path_views_admin + 'elements/notify'
 }));
 
 app.use(validator({
@@ -73,6 +82,7 @@ app.locals.moment = moment;
 
 //Setup Router
 app.use(`/${systemConfigs.prefixAdmin}/`, require(__path_routes + 'backend/index'));
+app.use(`/${systemConfigs.prefixBlog}/`, require(__path_routes + 'frontend/index'));
 app.use('/', require(__path_routes + 'frontend/index'));
 
 // catch 404 and forward to error handler
@@ -88,7 +98,7 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render(__path_views + 'pages/error', { pageTitle: 'Page Not Found' });
+    res.render(__path_views_admin + 'pages/error', { pageTitle: 'Page Not Found' });
 });
 
 module.exports = app;

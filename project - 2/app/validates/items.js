@@ -21,5 +21,9 @@ module.exports = {
         // Content
         req.checkBody('content', util.format(Notify.ERROR_CONTENT, option.content.min, option.content.max))
             .isLength({ min: option.content.min, max: option.content.max });
+
+        let errors = req.validationErrors() !== false ? req.validationErrors() : [];
+
+        return errors;
     }
 }

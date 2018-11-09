@@ -1,0 +1,6 @@
+<% 
+    slugHelper = (linkPrefix, slug, id) => { 
+        let link        = linkPrefix + 'slug/' + id + '/' + slug; 
+        return `<a href="${link}">${slug}</a>`;
+    } 
+%>

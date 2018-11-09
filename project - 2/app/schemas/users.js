@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const databaseConfigs = require(__path_config + 'database');
 var schema = new mongoose.Schema({
     name: String,
+    avatar: String,
     status: String,
     ordering: Number,
     content: String,

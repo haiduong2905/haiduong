@@ -14,7 +14,7 @@ const pageTitleIndex = 'Items Managment';
 const pageTitleAdd = pageTitleIndex + ' - Add';
 const pageTitleEdit = pageTitleIndex + ' - Edit';
 
-const folderView = __path_views + 'pages/items/'; // Khai báo folder view của mỗi phần quản lý
+const folderView = __path_views_admin + 'pages/items/'; // Khai báo folder view của mỗi phần quản lý
 
 /* GET users listing. */
 router.get('(/status/:status)?', async(req, res, next) => {
@@ -115,14 +115,12 @@ router.get('/form(/:id)?', (req, res, next) => {
 // POST ADD-EDIT
 router.post('/save', (req, res, next) => {
     req.body = JSON.parse(JSON.stringify(req.body));
-    ValidateItems.validator(req);
     let item = Object.assign(req.body); // Copy thuộc tính của body(form) vào biến item
-    let errors = req.validationErrors();
     let taskCurrent = (typeof item !== "undefined" && item.id !== '') ? 'edit' : 'add'; // Đặt biến cờ để phân trường hợp Edit hay Add
-
-    if (errors) {
+    let errors = ValidateItems.validator(req); // Lấy lỗi upload
+    if (errors.length > 0) {
         let pageTitle = (taskCurrent == 'add') ? pageTitleAdd : pageTitleEdit;
-        res.render(`${folderView}form`, { pageTitle: pageTitle, item, errors, groupsItems });
+        res.render(`${folderView}form`, { pageTitle: pageTitle, item, errors });
     } else {
         let message = (taskCurrent == 'add') ? Notify.ADD_SUCCESS : Notify.EDIT_SUCCESS;
         ItemsModel.saveItems(item, { task: taskCurrent }).then((result) => {

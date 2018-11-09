@@ -31,7 +31,7 @@ module.exports = {
         let data = { // bổ sung các thuộc tính chỉnh sửa: bởi ai, khi nào?
             modified: {
                 user_id: 0,
-                user_name: 0,
+                user_name: 'admin',
                 time: Date.now()
             }
         }
@@ -49,7 +49,7 @@ module.exports = {
             ordering: parseInt(orderings),
             modified: {
                 user_id: 0,
-                user_name: 0,
+                user_name: 'admin',
                 time: Date.now()
             }
         }
@@ -89,7 +89,7 @@ module.exports = {
                 content: item.content,
                 modified: { // bổ sung các thuộc tính chỉnh sửa: bởi ai, khi nào?
                     user_id: 0,
-                    user_name: 0,
+                    user_name: 'admin',
                     time: Date.now()
                 }
             });

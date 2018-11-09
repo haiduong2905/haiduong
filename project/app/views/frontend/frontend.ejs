@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ./elements/heads %>
+</head>
+<body>
+    <div id="header">
+        <div class="container">
+			<% include  ./elements/cart %>
+			<% include  ./elements/navbar %>
+        </div>
+    </div>
+    <% if(carousel_slide == true)  {%>
+        <% include ./elements/carousel-slide %>
+	<%} %>
+    <div id="mainBody">
+        <div class="container">
+            <div class="row">
+				<% include  ./elements/slidebar %>
+				<%- body %>
+            </div>
+        </div>
+    </div>
+	<% include ./elements/footer %>
+	<% include ./elements/scripts %>
+    
+  
+    

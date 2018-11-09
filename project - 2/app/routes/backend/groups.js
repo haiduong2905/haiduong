@@ -15,7 +15,7 @@ const pageTitleIndex = 'Groups Managment';
 const pageTitleAdd = pageTitleIndex + ' - Add';
 const pageTitleEdit = pageTitleIndex + ' - Edit';
 
-const folderView = __path_views + 'pages/groups/'; // Khai báo folder view của mỗi phần quản lý
+const folderView = __path_views_admin + 'pages/groups/'; // Khai báo folder view của mỗi phần quản lý
 
 /* GET users listing. */
 router.get('(/status/:status)?', async(req, res, next) => {
@@ -126,7 +126,7 @@ router.post('/save', (req, res, next) => {
 
     if (errors) {
         let pageTitle = (taskCurrent == 'add') ? pageTitleAdd : pageTitleEdit;
-        res.render(`${folderView}form`, { pageTitle: pageTitle, item, errors, groupsItems });
+        res.render(`${folderView}form`, { pageTitle: pageTitle, item, errors });
     } else {
         let message = (taskCurrent == 'add') ? Notify.ADD_SUCCESS : Notify.EDIT_SUCCESS;
         GroupsModel.saveItems(item, { task: taskCurrent }).then((result) => {

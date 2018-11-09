@@ -2,20 +2,40 @@ var express = require('express');
 var router = express.Router();
 const util = require('util');
 
+const collection = 'users';
+
 const systemConfigs = require(__path_config + 'system');
 const Notify = require(__path_config + 'notify');
-const UsersModel = require(__path_models + 'users');
+const UsersModel = require(__path_models + collection);
 const GroupsModel = require(__path_models + 'groups');
 const UtilsHelpers = require(__path_helpers + 'utils');
 const ParamsHelpers = require(__path_helpers + 'params');
-const ValidateUsers = require(__path_validates + 'users');
-const linkIndex = '/' + systemConfigs.prefixAdmin + '/users/';
+const FileHelper = require(__path_helpers + 'file');
+const ValidateUsers = require(__path_validates + collection);
+const linkIndex = '/' + systemConfigs.prefixAdmin + '/' + collection + '/';
 
 const pageTitleIndex = 'Users Managment';
 const pageTitleAdd = pageTitleIndex + ' - Add';
 const pageTitleEdit = pageTitleIndex + ' - Edit';
+const pageTitleUpload = pageTitleIndex + ' - Upload';
+const UploadAvatar = FileHelper.upload('avatar', collection); // Khai báo các giá trị upload
 
-const folderView = __path_views + 'pages/users/'; // Khai báo folder view của mỗi phần quản lý
+const folderView = __path_views_admin + 'pages/' + collection + '/'; // Khai báo folder view của mỗi phần quản lý
+
+
+/* Upload ảnh avatar */
+
+// router.post('/upload', (req, res, next) => {
+//     UploadAvatar(req, res, function(err) {
+//         let errors = [];
+//         if (err) {
+//             errors.push({ param: 'avatar', msg: err });
+//         }
+//         res.render(`${folderView}upload`, { pageTitle: pageTitleUpload, errors });
+//     })
+
+// });
+
 
 /* GET users listing. */
 router.get('(/status/:status)?', async(req, res, next) => {
@@ -31,7 +51,7 @@ router.get('(/status/:status)?', async(req, res, next) => {
         currentPage: parseInt(ParamsHelpers.getParam(req.query, 'page', 1)), // Đặt trang hiện tại là 1, // Trang mặc định
         pageRanges: 3 // Số lượng trang hiển thị trên Pagination
     };
-    let statusFilter = await UtilsHelpers.createFilterStatus(params.currentStatus, 'users');
+    let statusFilter = await UtilsHelpers.createFilterStatus(params.currentStatus, collection);
     let groupsItems = [];
     await GroupsModel.listItemsInSelectBox(params, null).then((items) => { //Lấy tên và ID của group đưa về users
         groupsItems = items;
@@ -132,28 +152,35 @@ router.get('/form(/:id)?', async(req, res, next) => {
 });
 // Post add + EDIT + Validate
 router.post('/save', async(req, res, next) => {
-    req.body = JSON.parse(JSON.stringify(req.body));
-    ValidateUsers.validator(req);
-
-    let item = Object.assign(req.body); // Copy thuộc tính của body(form) vào biến users
-    let errors = req.validationErrors();
-    let taskCurrent = (typeof item !== "undefined" && item.id !== '') ? 'edit' : 'add'; // Đặt biến cờ để phân trường hợp Edit hay Add
-
-    if (errors) {
-        let pageTitle = (taskCurrent == 'add') ? pageTitleAdd : pageTitleEdit;
-        let groupsItems = [];
-        await GroupsModel.listItemsInSelectBox().then((items) => { //Lấy tên và ID của group đưa về users
-            groupsItems = items;
-            groupsItems.unshift({ _id: 'novalue', name: 'Choose Group' });
-        })
-        res.render(`${folderView}form`, { pageTitle, item, errors, groupsItems });
-    } else {
-        let message = (taskCurrent == 'add') ? Notify.ADD_SUCCESS : Notify.EDIT_SUCCESS;
-        UsersModel.saveItems(item, { task: taskCurrent }).then((result) => {
-            req.flash('success', message, false);
-            res.redirect(linkIndex);
-        })
-    }
+    UploadAvatar(req, res, async(errUpload) => {
+        req.body = JSON.parse(JSON.stringify(req.body));
+        let item = Object.assign(req.body); // Copy thuộc tính của body(form) vào biến users
+        let taskCurrent = (typeof item !== "undefined" && item.id !== '') ? 'edit' : 'add'; // Đặt biến cờ để phân trường hợp Edit hay Add
+        let errors = ValidateUsers.validator(req, errUpload, taskCurrent); // Lấy lỗi upload
+        if (errors.length > 0) {
+            let pageTitle = (taskCurrent == 'add') ? pageTitleAdd : pageTitleEdit;
+            if (req.file != undefined) FileHelper.remove('public/uploads/' + collection + '/', req.file.filename); // Xóa đi file ảnh upload lỗi
+            let groupsItems = [];
+            await GroupsModel.listItemsInSelectBox().then((items) => { //Lấy tên và ID của group đưa về users
+                groupsItems = items;
+                groupsItems.unshift({ _id: 'novalue', name: 'Choose Group' });
+            })
+            if (taskCurrent == 'edit') item.avatar = item.image_old;
+            res.render(`${folderView}form`, { pageTitle, item, errors, groupsItems });
+        } else {
+            let message = (taskCurrent == 'add') ? Notify.ADD_SUCCESS : Notify.EDIT_SUCCESS;
+            if (req.file == undefined) { // ko upload lại hình
+                item.avatar = item.image_old; // giữ nguyên tên
+            } else {
+                item.avatar = req.file.filename;
+                if (taskCurrent == 'edit') FileHelper.remove('public/uploads/' + collection + '/', item.image_old); // Xóa hình cũ
+            }
+            UsersModel.saveItems(item, { task: taskCurrent }).then((result) => {
+                req.flash('success', message, false);
+                res.redirect(linkIndex);
+            })
+        }
+    });
 });
 
 // Sort
@@ -168,6 +195,7 @@ router.get('/filter-group/:group_id', (req, res, next) => {
     req.session.group_id = ParamsHelpers.getParam(req.params, 'group_id', '');
     res.redirect(linkIndex);
 });
+
 
 
 module.exports = router;

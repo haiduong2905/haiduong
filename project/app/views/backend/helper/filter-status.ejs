@@ -1,0 +1,10 @@
+<% filterStatusHelper = (collection, statusFilter) => { 
+    let xhtmlResult = '';
+    statusFilter.forEach ((item) => { 
+        let link = systemConfigs.prefixAdmin + '/' + collection + '/status/'+ item.value;
+        xhtmlResult+=  `<a class="btn m-b-sm btn-${item.class} btn-sm" href="${link}">
+            ${item.name.toUpperCase() + "("+ item.count +")"}        
+        </a> `;
+    }) 
+        return xhtmlResult;
+ } %>

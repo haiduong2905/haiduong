@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+const folderView = __path_views_backend + 'pages/home/';
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('pages/home/index', { pageTitle: 'HomePage' });
+    res.render(`${folderView}index`, { pageTitle: 'HomePage' });
 });
 module.exports = router;
