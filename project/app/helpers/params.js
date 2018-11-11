@@ -4,7 +4,6 @@ let getParam = (params, property, defaultValue) => {
     }
     return defaultValue;
 }
-
 module.exports = {
     getParam
 }

@@ -68,6 +68,7 @@ router.get('/change-status/:id/:status', (req, res, next) => {
         req.flash('success', Notify.CHANGE_STATUS_SUCCESS, false);
         res.redirect(linkIndex);
     });
+
 });
 
 // Delete item
@@ -88,7 +89,7 @@ router.get('/form(/:id)?', async(req, res, next) => {
         status: 'novalue',
         ordering: 0,
         category: '',
-        infomation: '',
+        content: '',
         category_id: '', // Gán trong trường hợp thêm mới để tránh lỗi
         category_name: '' // Gán trong trường hợp thêm mới để tránh lỗi
     };
@@ -126,7 +127,12 @@ router.post('/save', (req, res, next) => {
                 slug: StringHelpers.createAlias(item.slug),
                 status: item.status,
                 category: item.category,
-                infomation: item.infomation
+                content: item.content,
+                modified: {
+                    user_id: 0,
+                    user_name: 'admin',
+                    time: Date.now()
+                }
             }, (err, result) => {
                 req.flash('success', Notify.EDIT_SUCCESS, false);
                 res.redirect(linkIndex);
@@ -136,6 +142,11 @@ router.post('/save', (req, res, next) => {
         if (errors !== false) { //Có lỗi
             res.render(`${folderView}form`, { pageTitle: pageTitleAdd, item, errors });
         } else {
+            item.created = {
+                user_id: 0,
+                user_name: 'admin',
+                time: Date.now()
+            }
             new CategoryModel(item).save().then(() => {
                 req.flash('success', Notify.ADD_SUCCESS, false);
                 res.redirect(linkIndex);

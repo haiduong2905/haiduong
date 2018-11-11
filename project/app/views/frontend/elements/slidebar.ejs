@@ -1,61 +1,55 @@
 <div id="sidebar" class="span3">
     <div class="well well-small">
-        <a id="myCart" href="product_summary.html"><img src="frontend/images/ico-cart.png" alt="cart">3 Items in your cart <span class="badge badge-warning pull-right">$155.00</span></a>
+        <a id="myCart" href="product_summary.html"><img src="../frontend/images/ico-cart.png" alt="cart">3 Items in your cart <span class="badge badge-warning pull-right">$155.00</span></a>
     </div>
     <ul id="sideManu" class="nav nav-tabs nav-stacked">
-        <li class="subMenu open"><a> ĐIỆN TỬ [230]</a>
-            <ul>
-                <li><a class="active" href="products.html"><i class="icon-chevron-right"></i>Máy ảnh (100) </a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Thẻ nhớ, USB (50)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Điện thoại di động (80)</a></li>
-            </ul>
-        </li>
+            <li class="subMenu open"><a> ĐIỆN TỬ [<%= items.length %>]</a>
+                <ul>
+                <%  var arr = []; %>
+                <% for(let j = 0; j < items.length; j ++) {%>
+                    <% let count = items[j].category.name; %>
+                    <% arr.push(count) %>
+                <% } %>
+                <% let result1 = arr.filter(i => i == 'Máy ảnh').length; %>
+                <% let result2 = arr.filter(i => i == 'Thẻ nhớ và USB').length; %>
+                <% let result3 = arr.filter(i => i == 'Điện thoại di động').length; %>
+                    <li><a href="/product/may-anh" class="active" ><i class="icon-chevron-right"></i>Máy ảnh (<%= result1 %>) </a></li>
+                    <li><a href="/product/the-nho-va-usb"><i class="icon-chevron-right"></i>Thẻ nhớ, USB (<%= result2 %>)</a></li>
+                    <li><a href="/product/dien-thoai-di-dong"><i class="icon-chevron-right"></i>Điện thoại di động (<%= result3 %>)</a></li>
+                </ul>
+            </li>
+
         <li class="subMenu"><a> QUẦN ÁO [840] </a>
             <ul style="display:none">
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Women's Clothing (45)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Women's Shoes (8)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Women's Hand Bags (5)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Men's Clothings  (45)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Men's Shoes (6)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Kids Clothing (5)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Kids Shoes (3)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Women's Clothing (45)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Women's Shoes (8)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Women's Hand Bags (5)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Men's Clothings  (45)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Men's Shoes (6)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Kids Clothing (5)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Kids Shoes (3)</a></li>
             </ul>
         </li>
         <li class="subMenu"><a>THỰC PHẨM VÀ ĐỒ UỐNG [1000]</a>
             <ul style="display:none">
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Angoves  (35)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Bouchard Aine & Fils (8)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>French Rabbit (5)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Louis Bernard  (45)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>BIB Wine (Bag in Box) (8)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Other Liquors & Wine (5)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Garden (3)</a></li>
-                <li><a href="products.html"><i class="icon-chevron-right"></i>Khao Shong (11)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Angoves  (35)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Bouchard Aine & Fils (8)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>French Rabbit (5)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Louis Bernard  (45)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>BIB Wine (Bag in Box) (8)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Other Liquors & Wine (5)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Garden (3)</a></li>
+                <li><a href="#"><i class="icon-chevron-right"></i>Khao Shong (11)</a></li>
             </ul>
         </li>
-        <li><a href="products.html">SỨC KHỎE VÀ LÀM ĐẸP [18]</a></li>
-        <li><a href="products.html">THỂ THAO VÀ GIẢI TRÍ [58]</a></li>
-        <li><a href="products.html">SÁCH VÀ VUI CHƠI [14]</a></li>
+        <li><a href="#">SỨC KHỎE VÀ LÀM ĐẸP [18]</a></li>
+        <li><a href="#">THỂ THAO VÀ GIẢI TRÍ [58]</a></li>
+        <li><a href="#">SÁCH VÀ VUI CHƠI [14]</a></li>
     </ul>
     <br/>
+    
     <div class="thumbnail">
-        <img src="frontend/images/panasonic.jpg" alt="Bootshop panasonoc New camera" />
-        <div class="caption">
-            <h5>Panasonic</h5>
-            <h4 style="text-align:center">
-                <a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-        </div>
-    </div><br/>
-    <div class="thumbnail">
-        <img src="frontend/images/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-        <div class="caption">
-            <h5>Kindle</h5>
-            <h4 style="text-align:center">
-                <a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Thêm vào <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-        </div>
-    </div><br/>
-    <div class="thumbnail">
-        <img src="frontend/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
+        <img src="../frontend/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
         <div class="caption">
             <h5>Phương thức thanh toán</h5>
         </div>

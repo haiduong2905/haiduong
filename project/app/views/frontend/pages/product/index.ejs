@@ -1,3 +1,9 @@
+<%
+
+    const collection = 'items';
+    const folderUpload = 'uploads/' + collection + '/';
+
+%>
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="/">Home</a> <span class="divider">/</span></li>
@@ -79,7 +85,7 @@
                     <h3>Mới | Sẵn có</h3>
                     <hr class="soft" />
                     <h5>Tên sản phẩm </h5>
-                    <p>Ngày nay ngành công nghiệp đồ lót là một trong những lĩnh vực kinh doanh thành công nhất. Chúng tôi luôn giữ liên lạc với xu         hướng thời trang mới nhất - đó là lý do hàng hóa của chúng tôi rất phổ biến ...</p>
+                    <p>Ngày nay ngành công nghiệp đồ lót là một trong những lĩnh vực kinh doanh thành công nhất. Chúng tôi luôn giữ liên lạc với xu hướng thời trang mới nhất - đó là lý do hàng hóa của chúng tôi rất phổ biến ...</p>
                     <a class="btn btn-small pull-right" href="/detail">Xem chi tiết</a>
                     <br class="clr" />
                 </div>
@@ -174,71 +180,66 @@
         <div class="tab-pane  active" id="blockView">
             <!-- Danh sách sản phẩm -->
             <ul class="thumbnails">
+            <%  var mayanh = []; %>
+            <%  var thenho = []; %>
+            <%  var dienthoai = []; %>
+            <% for(let j = 0; j < items.length; j ++) {%>
+                <% let count = items[j].category.name; %>
+                <% if (count == 'Máy ảnh') {%>
+                    <% mayanh.push(items[j]) %>
+                <% } %>
+                <% if (count == 'Thẻ nhớ và USB') {%>
+                    <% thenho.push(items[j]) %>
+                <% } %>
+                <% if (count == 'Điện thoại di động') {%>
+                    <% dienthoai.push(items[j]) %>
+                <% } %>
+            <% } %>
+            <% mayanh.forEach((item) => { %>
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="/detail"><img src="frontend/images/1.jpg" alt="" /></a>
+                        <a href="/detail/<%= item.id %>"><img src="../<%= folderUpload + item.photo %>" alt="" /></a>
                         <div class="caption">
-                            <h5>Tên sản phẩm</h5>
-                            <p>Mô tả về sản phẩm</p>
+                            <h5><%= item.name %></h5>
+                            <p>
+                            <%- item.infomation %>
+                            </p>
                             <h4 style="text-align:center">
-                                <a class="btn" href="/detail"> <i class="icon-zoom-in"></i></a>
-                                <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;Giá sản phẩm</a>
-                            </h4>
+                                <a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;222.00</a></h4>
                         </div>
                     </div>
                 </li>
+            <% }) %>
+            <% thenho.forEach((item) => { %>
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="/detail"><img src="frontend/images/1.jpg" alt="" /></a>
+                        <a href="/detail/<%= item.id %>"><img src="../<%= folderUpload + item.photo %>" alt="" /></a>
                         <div class="caption">
-                            <h5>Tên sản phẩm</h5>
-                            <p>Mô tả về sản phẩm</p>
+                            <h5><%= item.name %></h5>
+                            <p>
+                            <%- item.infomation %>
+                            </p>
                             <h4 style="text-align:center">
-                                <a class="btn" href="/detail"> <i class="icon-zoom-in"></i></a>
-                                <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;Giá sản phẩm</a>
-                            </h4>
+                                <a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;222.00</a></h4>
                         </div>
                     </div>
                 </li>
+            <% }) %>
+            <% dienthoai.forEach((item) => { %>
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="/detail"><img src="frontend/images/1.jpg" alt="" /></a>
+                        <a href="/detail/<%= item.id %>"><img src="../<%= folderUpload + item.photo %>" alt="" /></a>
                         <div class="caption">
-                            <h5>Tên sản phẩm/h5>
-                            <p>Mô tả về sản phẩm</p>
+                            <h5><%= item.name %></h5>
+                            <p>
+                            <%- item.infomation %>
+                            </p>
                             <h4 style="text-align:center">
-                                <a class="btn" href="/detail"> <i class="icon-zoom-in"></i></a>
-                                <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;Giá sản phẩm</a>
-                            </h4>
+                                <a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;222.00</a></h4>
                         </div>
                     </div>
                 </li>
-                <li class="span3">
-                    <div class="thumbnail">
-                        <a href="/detail"><img src="frontend/images/1.jpg" alt="" /></a>
-                        <div class="caption">
-                            <h5>Tên sản phẩm</h5>
-                            <p>Mô tả về sản phẩm</p>
-                            <h4 style="text-align:center">
-                                <a class="btn" href="/detail"> <i class="icon-zoom-in"></i></a>
-                                <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;Giá sản phẩm</a>
-                            </h4>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div class="thumbnail">
-                        <a href="/detail"><img src="frontend/images/1.jpg" alt="" /></a>
-                        <div class="caption">
-                            <h5>Tên sản phẩm</h5>
-                            <p>Mô tả về sản phẩm</p>
-                            <h4 style="text-align:center">
-                                <a class="btn" href="/detail"> <i class="icon-zoom-in"></i></a>
-                                <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">&euro;Giá sản phẩm</a>
-                            </h4>
-                        </div>
-                    </div>
-                </li>
+            <% }) %>
             </ul>
             <!-- Hết danh sách sản phẩm -->
             <hr class="soft" />

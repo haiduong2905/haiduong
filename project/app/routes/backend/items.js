@@ -8,6 +8,7 @@ const fs = require('fs');
 
 const collection = 'items';
 
+const StringHelpers = require(__path_helpers + 'string');
 const systemConfigs = require(__path_config + 'system');
 const Notify = require(__path_config + 'notify');
 const ItemsModel = require(__path_schemas + collection);
@@ -41,7 +42,7 @@ router.get('(/status/:status)?', async(req, res, next) => {
     let statusFilter = await UtilsHelpers.createFilterStatus(currentStatus, collection);
     let pagination = { // Cấu hình số lượng trang, số lượng phần tử/trang, trang hiện tại
         totalItems: 1,
-        totalItemsPerPage: 3, // Số lượng phần tử trên 1 trang
+        totalItemsPerPage: 5, // Số lượng phần tử trên 1 trang
         currentPage: parseInt(ParamsHelpers.getParam(req.query, 'page', 1)), // Đặt trang hiện tại là 1, // Trang mặc định
         pageRanges: 3 // Số lượng trang hiển thị trên Pagination
     };
@@ -53,7 +54,6 @@ router.get('(/status/:status)?', async(req, res, next) => {
     // }
 
     if (currentStatus !== 'all') objWhere.status = currentStatus;
-
     await ItemsModel.countDocuments(objWhere).then((data) => { // Đếm số phần tử có trong dữ liệu trả về 
         pagination.totalItems = data;
     });
@@ -103,6 +103,7 @@ router.get('/form(/:id)?', async(req, res, next) => {
     let id = ParamsHelpers.getParam(req.params, 'id', '');
     let item = {
         name: '',
+        price: '',
         photo: '',
         status: 'novalue',
         ordering: 0,
@@ -136,7 +137,6 @@ router.post('/save', upload.single('photo'), async(req, res, next) => {
     let categoryItems = [];
     await CategoryModel.find({}, { _id: 1, name: 1 }).then((items) => { //Lấy tên và ID của category đưa về article
         categoryItems = items;
-
         categoryItems.unshift({ _id: 'novalue', name: 'Choose Category' });
     })
     if (typeof item !== "undefined" && item.id !== '') { // Trường hợp Edit item
@@ -146,6 +146,8 @@ router.post('/save', upload.single('photo'), async(req, res, next) => {
             ItemsModel.updateOne({ _id: item.id }, {
                 ordering: parseInt(item.ordering),
                 name: item.name,
+                price: item.price,
+                slug: StringHelpers.createAlias(item.slug),
                 photo: item.photo_old,
                 status: item.status,
                 infomation: item.infomation,
@@ -162,7 +164,6 @@ router.post('/save', upload.single('photo'), async(req, res, next) => {
                 req.flash('success', Notify.EDIT_SUCCESS, false);
                 res.redirect(linkIndex);
             });
-            console.log(item);
         }
     } else { // Trường hợp Add item
         if (errors !== false) { //Có lỗi

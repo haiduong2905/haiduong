@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const databaseConfigs = require(__path_config + 'database');
 var schema = new mongoose.Schema({
     name: String,
+    slug: String,
     photo: String,
     status: String,
     ordering: Number,
+    price: Number,
     infomation: String,
     category: {
         id: String,

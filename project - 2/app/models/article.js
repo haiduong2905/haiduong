@@ -117,7 +117,6 @@ module.exports = {
 
     deleteItems: async(id, options = null) => {
         if (options.task == 'delete-one') {
-
             await ArticleModel.findById(id).then((item) => {
                 FileHelper.remove(uploadFolder, item.thumb);
             });

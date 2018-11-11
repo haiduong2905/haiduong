@@ -22,21 +22,6 @@ const UploadThumb = FileHelper.upload('thumb', collection); // Khai báo các gi
 
 const folderView = __path_views_admin + 'pages/' + collection + '/'; // Khai báo folder view của mỗi phần quản lý
 
-
-/* Upload ảnh thumb */
-
-// router.post('/upload', (req, res, next) => {
-//     Uploadthumb(req, res, function(err) {
-//         let errors = [];
-//         if (err) {
-//             errors.push({ param: 'thumb', msg: err });
-//         }
-//         res.render(`${folderView}upload`, { pageTitle: pageTitleUpload, errors });
-//     })
-
-// });
-
-
 /* GET article listing. */
 router.get('(/status/:status)?', async(req, res, next) => {
     let params = {}; // Chứa tất cả các tham số cần lấy ra để sử dụng
@@ -87,10 +72,8 @@ router.get('/change-status/:id/:status', (req, res, next) => {
 // Change Special One
 router.get('/change-special/:id/:special', (req, res, next) => {
     let currentSpecial = ParamsHelpers.getParam(req.params, 'special', 'normal');
-
     let id = ParamsHelpers.getParam(req.params, 'id', '');
     ArticleModel.changeSpecial(id, currentSpecial, { task: 'update-one' }).then((result) => {
-
         req.flash('success', Notify.CHANGE_SPECIAL_SUCCESS, false);
         res.redirect(linkIndex);
     });
@@ -207,7 +190,5 @@ router.get('/filter-category/:category_id', (req, res, next) => {
     req.session.category_id = ParamsHelpers.getParam(req.params, 'category_id', '');
     res.redirect(linkIndex);
 });
-
-
 
 module.exports = router;

@@ -3,6 +3,7 @@
 <% include ./../../helper/pagination %>
 <% include ./../../helper/photo %>
 <% include ./../../helper/source-by %>
+<% include ./../../helper/slug%>
 
 <!--Khai báo biến lưu trữ collection. Nếu thay đổi hay copy thì chỉ cần thay đổi ở đây-->
 <%  
@@ -19,6 +20,7 @@
 </div>
 -->
 <div class="row">
+
     <div class="col-lg-12">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -39,7 +41,6 @@
             <div class="panel-heading">
                 List Items
             </div>
-            <%= JSON.stringify(items)%>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <form role="form" class="form-inline zt-form" id="zt-form" action="" method="post">
@@ -54,9 +55,11 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th class="text-center">Name</th>
-                                    <th class="text-center">Photos</th>
+                                    <th class="text-center" style="width:10%">Photos</th>
+                                    <th class="text-center">Price</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Ordering</th>
+                                    <th class="text-center">Slug</th>
                                     <th class="text-center">Category</th>
                                     <th class="text-center">Create by</th>
                                     <th class="text-center">Modified by</th>
@@ -69,8 +72,10 @@
                                         <td class="text-center"><%= index + 1 %></td>
                                         <td><%= item.name %></td>
                                         <td class="text-center"><%- photoHelper(folderUpload, item.photo, item.name) %></td>
+                                        <td class="text-center"><%= item.price + `đ`%></td>
                                         <td class="text-center"><%- statusHelper(collection, item.status, item.id) %></td>
                                         <td class="text-center"><%= item.ordering %></td>
+                                        <td class="text-center"><%- slugHelper(linkPrefix, item.slug, item.id) %></td>
                                         <td class="text-center"><%= item.category.name %></td>
                                         <td><%- sourceByHelper(item.created.user_name, item.created.time) %></td>
                                         <td><%- sourceByHelper(item.modified.user_name, item.modified.time) %></td>
