@@ -33,7 +33,22 @@ var storage = multer.diskStorage({
     }
 })
 
-var upload = multer({ storage: storage });
+var upload = multer({
+    storage: storage,
+    // limits: {
+    //     fileSize: 2 * 1024 * 1024, //Giới hạn kích thước ảnh 2mb
+    // },
+    // fileFilter: (req, file, cb) => {
+    //     const fileType = new RegExp('jpg|jpeg|png|gif');
+    //     const extName = fileType.test(path.extname(file.originalname).toLowerCase());
+    //     const mimeType = fileType.test(file.mimetype);
+    //     if (extName && mimeType) {
+    //         return cb(null, true)
+    //     } else {
+    //         cb(Notify.ERROR_FILE_EXTENSION);
+    //     }
+    // }
+});
 
 /* GET users listing. */
 router.get('(/status/:status)?', async(req, res, next) => {
@@ -134,6 +149,7 @@ router.post('/save', upload.single('photo'), async(req, res, next) => {
     ValidateItems.validator(req);
     let item = Object.assign(req.body); // Copy thuộc tính của body(form) vào biến item
     let errors = req.validationErrors();
+
     let categoryItems = [];
     await CategoryModel.find({}, { _id: 1, name: 1 }).then((items) => { //Lấy tên và ID của category đưa về article
         categoryItems = items;
@@ -143,7 +159,7 @@ router.post('/save', upload.single('photo'), async(req, res, next) => {
         if (errors) { //Có lỗi
             res.render(`${folderView}form`, { pageTitle: pageTitleEdit, item, errors, categoryItems });
         } else {
-            ItemsModel.updateOne({ _id: item.id }, {
+                ItemsModel.updateOne({ _id: item.id }, {
                 ordering: parseInt(item.ordering),
                 name: item.name,
                 price: item.price,

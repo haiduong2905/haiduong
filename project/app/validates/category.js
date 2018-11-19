@@ -5,7 +5,7 @@ const option = {
     ordering: { min: 1, max: 100 },
     status: { value: 'novalue' },
     slug: { min: 3, max: 20 },
-    content: { min: 5, max: 200 }
+    content: { min: 5 }
 }
 
 module.exports = {
@@ -19,11 +19,11 @@ module.exports = {
         // Status
         req.checkBody('status', util.format(Notify.ERROR_STATUS))
             .isNotEqual(option.status.value);
-        // Group ACP
-        req.checkBody('slug', Notify.ERROR_GROUPACP)
+        // Slug
+        req.checkBody('slug', util.format(Notify.ERROR_SLUG))
             .notEmpty();
         // Content
-        req.checkBody('content', util.format(Notify.ERROR_CONTENT, option.content.min, option.content.max))
-            .isLength({ min: option.content.min, max: option.content.max });
+        req.checkBody('content', util.format(Notify.ERROR_CONTENT, option.content.min))
+            .isLength({ min: option.content.min });
     }
 }

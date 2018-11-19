@@ -1,0 +1,19 @@
+<% featuredHelper = ()=> {
+    let xhtmlResult ='';
+    items.forEach((item)=>{
+        if(item.ordering == 1 ) {
+                xhtmlResult += `
+                    <li class="span3">
+                        <div class="thumbnail">
+                            <i class="tag"></i>
+                            <a href="/detail/${item.id}"><img src="${folderUpload + item.photo}" alt="${item.name}"></a>
+                            <div class="caption">
+                                <h5>${item.name}</h5>
+                                <h4><a class="btn btn-primary" href="/detail/${item.id}">VIEW</a> <span class="pull-right">${item.price + 'đ'}</span></h4>
+                            </div>
+                        </div>
+                    </li>`;
+                 }
+            }) 
+    return xhtmlResult;
+}%>

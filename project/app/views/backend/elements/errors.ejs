@@ -4,7 +4,8 @@
             <div class="alert alert-danger" role="alert">
                 <ul>
                 <% errors.forEach((error) => {%>
-                    <li><b><%= error.param.charAt(0).toUpperCase() + error.param.slice(1) %></b> : <%= error.msg %> </li>
+                <% let errorString = error.param %>
+                    <li><b><%= errorString.charAt(0).toUpperCase() + errorString.slice(1) %></b> : <%= error.msg %> </li>
                 <% }) %> 
                 </ul>
             </div>
